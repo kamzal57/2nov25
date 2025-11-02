@@ -21,7 +21,7 @@ const LANGUAGES = [
   'json',
   'sql',
   'bash',
-]
+] as const
 
 export function CodeBlockNodeView({ node, updateAttributes, deleteNode }: any) {
   const { language } = node.attrs
@@ -40,7 +40,7 @@ export function CodeBlockNodeView({ node, updateAttributes, deleteNode }: any) {
       try {
         const highlighter = await getHighlighter({
           themes: ['github-dark', 'github-light'],
-          langs: LANGUAGES,
+          langs: [...LANGUAGES],
         })
 
         const html = highlighter.codeToHtml(node.textContent, {
