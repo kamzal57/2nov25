@@ -21,6 +21,8 @@ export async function GET(request: NextRequest) {
   }
 
   if (code) {
+    const response = NextResponse.redirect(`${origin}/`)
+    
     const supabase = createServerClient(
       supabaseUrl,
       supabaseAnonKey,
@@ -30,13 +32,17 @@ export async function GET(request: NextRequest) {
             return request.cookies.getAll()
           },
           setAll(cookiesToSet) {
-            cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+            cookiesToSet.forEach(({ name, value, options }) => {
+              response.cookies.set(name, value, options)
+            })
           },
         },
       }
     )
 
     await supabase.auth.exchangeCodeForSession(code)
+    
+    return response
   }
 
   // URL to redirect to after sign in process completes
