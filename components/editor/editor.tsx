@@ -157,7 +157,9 @@ export function Editor({ documentId }: EditorProps) {
             .from('documents')
             .update({ title })
             .eq('id', documentId)
-            .then()
+            .then(({ error }) => {
+              if (error) console.error('Error updating title:', error)
+            })
         }
       }
     }
